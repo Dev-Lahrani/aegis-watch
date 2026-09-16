@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AegisWatch — NASDAQ Market Surveillance & Abuse Engine</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="terminal-body">
+  <!-- TOP INSTITUTIONAL STATUS HEADER -->
+  <header class="terminal-header">
+    <div class="header-left">
+      <div class="logo-group">
+        <span class="shield-icon">🛡️</span>
+        <div>
+          <div class="brand-title">AEGISWATCH <span class="brand-badge">NASDAQ SMARTS EDITION</span></div>
+          <div class="brand-sub">Microsecond Limit Order Book (LOB) Market Abuse Watchdog · Synapse 1.0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="instrument-pill">
+        <span class="live-dot pulse"></span>
+        <span class="ticker" id="ticker-display">NVDA</span>
+        <span class="venue-tag">NASDAQ</span>
+        <span class="mid-price-header" id="header-mid-price">$180.00</span>
+        <span class="spread-header" id="header-spread">Spread: $0.01</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="telemetry-pill">
+        <span class="pill-label">LATENCY</span>
+        <span class="pill-val" id="telemetry-latency">0.38 ms</span>
+      </div>
+      <div class="telemetry-pill">
+        <span class="pill-label">EVALUATED</span>
+        <span class="pill-val" id="telemetry-ticks">0 ticks</span>
+      </div>
+      <div class="threat-gauge-pill">
+        <span class="pill-label">THREAT INDEX</span>
+        <div class="threat-bar-wrap">
+          <div class="threat-bar-fill" id="header-threat-bar" style="width: 15%;"></div>
+        </div>
+        <span class="threat-val" id="header-threat-val">15%</span>
+      </div>
+      <button class="btn-reset" id="btn-reset" title="Reset Book & State">RESET</button>
+    </div>
+  </header>
+
+  <!-- INTERACTIVE ABUSE INJECTION CONTROL BAR -->
+  <section class="control-panel">
+    <div class="control-panel-title">
+      <span class="icon">⚡</span>
+      <span>SIMULATION ATTACK INJECTORS (LIVE DEMO)</span>
+      <span class="control-hint">— Click any scenario to inject predatory order flow and observe instant sub-millisecond detection</span>
+    </div>
+    <div class="attack-buttons-grid">
+      <button class="btn-attack btn-spoof" id="btn-spoof" data-attack="SPOOFING">
+        <span class="btn-icon">⚡</span>
+        <div class="btn-text">
+          <strong>Inject Spoofing</strong>
+          <small>Phantom bids + quick cancellation</small>
+        </div>
+      </button>
+
+      <button class="btn-attack btn-layer" id="btn-layer" data-attack="LAYERING">
+        <span class="btn-icon">🪜</span>
+        <div class="btn-text">
+          <strong>Inject Layering</strong>
+          <small>Multi-level staircase ladder</small>
+        </div>
+      </button>
+
+      <button class="btn-attack btn-stuff" id="btn-stuff" data-attack="QUOTE_STUFFING">
+        <span class="btn-icon">💣</span>
+        <div class="btn-text">
+          <strong>Inject Quote Stuffing</strong>
+          <small>Rapid burst of 50 micro-orders</small>
+        </div>
+      </button>
+
+      <button class="btn-attack btn-wash" id="btn-wash" data-attack="WASH_TRADING">
+        <span class="btn-icon">🔄</span>
+        <div class="btn-text">
+          <strong>Inject Wash Trade</strong>
+          <small>Zero net change self-matching</small>
+        </div>
+      </button>
+
+      <button class="btn-attack btn-momentum" id="btn-momentum" data-attack="MOMENTUM_IGNITION">
+        <span class="btn-icon">🚀</span>
+        <div class="btn-text">
+          <strong>Momentum Ignition</strong>
+          <small>Aggressive sweep breakout</small>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN SURVEILLANCE WORKSTATION GRID -->
+  <main class="surveillance-grid">
+
+    <!-- LEFT COLUMN: QUANTITATIVE MICROSTRUCTURE METRICS -->
+    <aside class="panel col-telemetry">
+      <div class="panel-header">
+        <span class="panel-title">MICROSTRUCTURE SIGNALS</span>
+        <span class="status-indicator live">STREAMING</span>
+      </div>
+
+      <div class="metrics-cards">
+        <!-- Order Flow Imbalance (OFI) -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Order Flow Imbalance (OFI)</span>
+            <span class="metric-num" id="val-ofi">0.00</span>
+          </div>
+          <div class="ofi-gauge-track">
+            <div class="ofi-center-mark"></div>
+            <div class="ofi-bar" id="bar-ofi"></div>
+          </div>
+          <div class="metric-sub-labels">
+            <span>-1.0 (Sell Pressure)</span>
+            <span>0</span>
+            <span>+1.0 (Buy Pressure)</span>
+          </div>
+        </div>
+
+        <!-- Cancel to Trade Ratio (CTR) -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Cancel-to-Trade Ratio (CTR)</span>
+            <span class="metric-num" id="val-ctr">0.0x</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="bar-ctr" style="width: 5%;"></div>
+          </div>
+          <div class="metric-sub-labels">
+            <span>Normal: &lt;3x</span>
+            <span class="warning-text">Warning: &gt;5x</span>
+            <span class="danger-text">Spoofing: &gt;15x</span>
+          </div>
+        </div>
+
+        <!-- Flashing Orders Ratio (< 50ms) -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Flashing Orders (&lt;50ms)</span>
+            <span class="metric-num" id="val-flashing">0.0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill danger-fill" id="bar-flashing" style="width: 0%;"></div>
+          </div>
+          <div class="metric-sub-labels">
+            <span>Organic: &lt;5%</span>
+            <span class="danger-text">Phantom Flashing: &gt;40%</span>
+          </div>
+        </div>
+
+        <!-- Toxicity Clock (VPIN) -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Toxicity Clock (VPIN)</span>
+            <span class="metric-num" id="val-vpin">0.18</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="bar-vpin" style="width: 18%;"></div>
+          </div>
+          <div class="metric-sub-labels">
+            <span>Liquid: 0.15–0.30</span>
+            <span class="danger-text">Toxic Imbalance: &gt;0.65</span>
+          </div>
+        </div>
+
+        <!-- Velocities & Depth Skew -->
+        <div class="stats-mini-grid">
+          <div class="mini-stat">
+            <span class="mini-label">TRADE VELOCITY</span>
+            <span class="mini-val" id="val-trade-vel">0 /s</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-label">CANCEL VELOCITY</span>
+            <span class="mini-val" id="val-cancel-vel">0 /s</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-label">DEPTH IMBALANCE</span>
+            <span class="mini-val" id="val-depth-imb">0.0%</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-label">MICROPRICE</span>
+            <span class="mini-val" id="val-microprice">$180.00</span>
+          </div>
+        </div>
+
+        <!-- Feature Attribution Breakdown (Head 2 ML) -->
+        <div class="metric-card attribution-card">
+          <div class="metric-header">
+            <span>Factor Attribution (SHAP-Decomposed)</span>
+          </div>
+          <div class="attr-bars-list" id="attr-bars-list">
+            <div class="attr-item">
+              <span class="attr-name">cancel_to_trade_ratio</span>
+              <div class="attr-track"><div class="attr-fill" style="width: 45%;"></div></div>
+              <span class="attr-pct">45%</span>
+            </div>
+            <div class="attr-item">
+              <span class="attr-name">flashing_ratio</span>
+              <div class="attr-track"><div class="attr-fill" style="width: 35%;"></div></div>
+              <span class="attr-pct">35%</span>
+            </div>
+            <div class="attr-item">
+              <span class="attr-name">order_flow_imbalance</span>
+              <div class="attr-track"><div class="attr-fill" style="width: 20%;"></div></div>
+              <span class="attr-pct">20%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER COLUMN: LIMIT ORDER BOOK L2 & TIME & SALES -->
+    <section class="panel col-book">
+      <div class="panel-header">
+        <span class="panel-title">LEVEL-2 ORDER BOOK (TICK-BY-TICK)</span>
+        <div class="book-legend">
+          <span class="legend-item"><span class="box-ask"></span> ASKS (SELL)</span>
+          <span class="legend-item"><span class="box-bid"></span> BIDS (BUY)</span>
+        </div>
+      </div>
+
+      <div class="lob-container">
+        <!-- ASKS (DESCENDING ORDER) -->
+        <div class="lob-ladder asks-ladder" id="asks-ladder">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- SPREAD & MID BANNER -->
+        <div class="mid-spread-banner">
+          <div class="banner-left">
+            <span class="banner-label">INSIDE SPREAD</span>
+            <span class="banner-spread-val" id="banner-spread">$0.01</span>
+          </div>
+          <div class="banner-center">
+            <span class="banner-mid-val" id="banner-mid">$180.00</span>
+          </div>
+          <div class="banner-right">
+            <span class="banner-label">MICROPRICE</span>
+            <span class="banner-micro-val" id="banner-micro">$180.005</span>
+          </div>
+        </div>
+
+        <!-- BIDS (DESCENDING ORDER) -->
+        <div class="lob-ladder bids-ladder" id="bids-ladder">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- TIME & SALES TAPE -->
+      <div class="trades-tape-wrap">
+        <div class="trades-tape-header">
+          <span>TIME & SALES (RECENT EXECUTIONS)</span>
+          <span class="sub-label">REAL-TIME TAPE</span>
+        </div>
+        <div class="trades-tape-table-wrap">
+          <table class="trades-table">
+            <thead>
+              <tr>
+                <th>TIME</th>
+                <th>TRADE ID</th>
+                <th>PRICE</th>
+                <th>SIZE</th>
+                <th>SIDE</th>
+              </tr>
+            </thead>
+            <tbody id="trades-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: SURVEILLANCE ALERTS & AUDIT TRAIL -->
+    <aside class="panel col-alerts">
+      <div class="panel-header">
+        <div class="alerts-header-group">
+          <span class="panel-title">REGULATORY WATCHDOG CONSOLE</span>
+          <span class="badge-alert-count" id="badge-alert-count">0 ALERTS</span>
+        </div>
+        <span class="status-indicator pulse-red" id="alert-stream-status">MONITORING</span>
+      </div>
+
+      <div class="alerts-stream-container" id="alerts-stream">
+        <div class="empty-alerts-state" id="empty-alerts-state">
+          <div class="empty-icon">🛡️</div>
+          <div class="empty-title">Zero Market Abuse Detected</div>
+          <div class="empty-desc">The dual-head surveillance engine is continuously analyzing order book microsecond state transitions. Inject a test attack above to simulate an alert.</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- EVIDENTIARY REGULATORY DOSSIER MODAL -->
+  <div class="modal-backdrop" id="dossier-modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge">FORMAL EVIDENTIARY DOSSIER</span>
+          <h2 class="modal-case-no" id="modal-case-no">SEC/FINRA-ENF-ALT-0001</h2>
+        </div>
+        <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+      </div>
+
+      <div class="modal-body" id="modal-body-content">
+        <!-- Dynamically rendered dossier content -->
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-copy-json">Copy JSON Audit Record</button>
+        <button class="btn-primary" onclick="window.print()">Print Regulatory Report</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

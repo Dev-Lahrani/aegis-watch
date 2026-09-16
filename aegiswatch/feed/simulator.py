@@ -142,8 +142,9 @@ class MarketFeedSimulator:
             side = OrderSide.BUY if random.random() > 0.5 else OrderSide.SELL
             aggr_price = best_ask if side == OrderSide.BUY else best_bid
             qty = random.choice([25, 50, 100])
-            buyer_seller = "INSTITUTIONAL_EXEC"
-            self.book.add_order(self._next_order_id("TRADE_FILL"), buyer_seller, side, aggr_price, qty, now_us)
+            taker_traders = ["FIDELITY_FUND", "BLACKROCK_INDEX", "VANGUARD_ETF", "BRIDGEWATER_MACRO", "RETAIL_FLOW_B"]
+            taker_id = random.choice(taker_traders)
+            self.book.add_order(self._next_order_id("TRADE_FILL"), taker_id, side, aggr_price, qty, now_us)
 
         # 4. Clean up distant/stale orders if depth is too deep
         if len(self.book._sorted_bid_prices) > 15:

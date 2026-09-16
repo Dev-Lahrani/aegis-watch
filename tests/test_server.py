@@ -56,3 +56,13 @@ async def test_regulatory_dossier_generation():
             assert "statutory_violations" in dossier
             assert "evidentiary_data" in dossier
             assert "enforcement_recommendation" in dossier
+
+
+@pytest.mark.anyio
+async def test_serve_dashboard_index():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        res = await client.get("/")
+        assert res.status_code == 200
+        assert "AegisWatch" in res.text
+

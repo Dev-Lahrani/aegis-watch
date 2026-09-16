@@ -95,3 +95,44 @@ This document records every architectural, algorithmic, and engineering decision
   - Compliance officers do not need more logs; they need **actionable, defensible evidence** that can be directly submitted to listing committees or regulatory authorities.
 - **How Used in this Project**: Accessible via `GET /api/dossier/{alert_id}` and rendered interactively in the forensic modal in the web HUD.
 - **Significance**: Transforms AegisWatch from a mere alert detector into a complete regulatory compliance workflow system.
+
+---
+
+## D7. Market Simulation & Abuse Injection Mechanics: Dynamic Injections vs. Static Trace Replay
+
+- **Decision**: Build an active, parametric **Market Abuse Injection Engine** supporting live triggerable scenarios (Spoofing, Layering, Quote Stuffing, Wash Trading, Momentum Ignition).
+- **Alternatives Considered**:
+  1. *Static Historical PCAP / ITCH File Replay*: Replays a recorded crash or abuse tape. While authentic, it is non-interactive; if a judge asks "what if the spoofer cancels in 15ms instead of 40ms?", static replay cannot respond.
+  2. *Pure Random Noise Simulation*: Doesn't simulate real institutional participant archetypes (market makers, institutional block buyers, HFT latency arbiters).
+- **Why Chosen over Alternatives**:
+  - **Live Hackathon Wow-Factor**: Allows judges to physically click "Inject Spoofing" or "Inject Layering" on the terminal HUD and witness the exact microsecond trigger, CTR spike, and evidentiary dossier generation in real time.
+- **How Used in this Project**: Implemented in `aegiswatch/feed/simulator.py` and exposed via REST `POST /api/attack` and terminal HUD buttons.
+- **Significance**: Elevates the demo from a passive spectator slide deck to an engaging, interactive system stress-test.
+
+---
+
+## D8. Concurrency & Asynchronous Event Model: Native AsyncIO WebSocket Fan-out vs. External Message Brokers (Kafka / RabbitMQ)
+
+- **Decision**: Implement a native Python `asyncio` event loop with in-memory non-blocking WebSocket fan-out for real-time tick streaming.
+- **Alternatives Considered**:
+  1. *Apache Kafka / Redpanda*: Standard for enterprise exchange distribution, but requires Docker/Java/heavy daemons that create setup friction in an 8-hour offline hackathon sprint.
+  2. *Redis Pub/Sub*: Lightweight, but still adds an external process dependency that could fail offline.
+  3. *HTTP Long Polling*: High latency (>100ms), high HTTP header overhead, and unsuitable for 20Hz order book depth rendering.
+- **Why Chosen over Alternatives**:
+  - Delivers sub-millisecond event dispatch to frontend clients with **zero external software dependencies**. A single `python -m aegiswatch` command runs everything.
+- **How Used in this Project**: Implemented in `aegiswatch/server/app.py` via `broadcast_market_packet` and `@app.websocket("/ws/stream")`.
+- **Significance**: Eliminates environmental flakiness and guarantees rock-solid reliability during offline finale presentations.
+
+---
+
+## D9. Machine Learning Model Selection: Isolation Forest with Synthetic Baseline vs. Deep Recurrent Autoencoders
+
+- **Decision**: Deploy an adaptive `IsolationForest` (Scikit-Learn) with pre-seeded normal microstructure distribution and periodic rolling background updates.
+- **Alternatives Considered**:
+  1. *Deep LSTM / Transformer Autoencoder (PyTorch)*: High model weight size (100MB+), requires GPU acceleration for sub-millisecond inference, and prone to catastrophic forgetting or cold-start divergence.
+  2. *Static Rule-Only System (No ML)*: Fails to detect novel non-linear manipulation strategies that avoid predetermined thresholds.
+- **Why Chosen over Alternatives**:
+  - Isolation Forest is fast ($\sim 5\text{ ms}$ fit, $<0.5\text{ ms}$ inference), operates without supervision, produces explainable multivariate distance metrics, and runs effortlessly on standard multi-core laptop CPUs.
+- **How Used in this Project**: Implemented in `aegiswatch/detectors/ml_detector.py`, providing Head 2 unsupervised anomaly scores and z-score factor attributions.
+- **Significance**: Balances state-of-the-art multivariate anomaly detection with lightweight, offline CPU inference.
+
